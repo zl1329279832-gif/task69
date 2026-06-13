@@ -103,6 +103,14 @@ public class ZhuanjiaEntity<T> implements Serializable {
 
 
     /**
+     * 专家学科类型
+     */
+    @TableField(value = "zhuanjia_types")
+
+    private Integer zhuanjiaTypes;
+
+
+    /**
      * 性别
      */
     @TableField(value = "sex_types")
@@ -226,6 +234,21 @@ public class ZhuanjiaEntity<T> implements Serializable {
         this.zhuanjiaPhoto = zhuanjiaPhoto;
     }
     /**
+	 * 设置：专家学科类型
+	 */
+    public Integer getZhuanjiaTypes() {
+        return zhuanjiaTypes;
+    }
+
+
+    /**
+	 * 获取：专家学科类型
+	 */
+
+    public void setZhuanjiaTypes(Integer zhuanjiaTypes) {
+        this.zhuanjiaTypes = zhuanjiaTypes;
+    }
+    /**
 	 * 设置：性别
 	 */
     public Integer getSexTypes() {
@@ -266,6 +289,7 @@ public class ZhuanjiaEntity<T> implements Serializable {
             ", zhuanjiaPhone=" + zhuanjiaPhone +
             ", zhuanjiaIdNumber=" + zhuanjiaIdNumber +
             ", zhuanjiaPhoto=" + zhuanjiaPhoto +
+            ", zhuanjiaTypes=" + zhuanjiaTypes +
             ", sexTypes=" + sexTypes +
             ", createTime=" + createTime +
         "}";

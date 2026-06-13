@@ -129,6 +129,22 @@ public class GaojianEntity<T> implements Serializable {
 
 
     /**
+     * 审稿意见链
+     */
+    @TableField(value = "gaojian_yesno_text")
+
+    private String gaojianYesnoText;
+
+
+    /**
+     * 稿件历史版本
+     */
+    @TableField(value = "gaojian_file_history")
+
+    private String gaojianFileHistory;
+
+
+    /**
      * 创建时间
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
@@ -289,6 +305,36 @@ public class GaojianEntity<T> implements Serializable {
         this.gaojianShenheContent = gaojianShenheContent;
     }
     /**
+	 * 设置：审稿意见链
+	 */
+    public String getGaojianYesnoText() {
+        return gaojianYesnoText;
+    }
+
+
+    /**
+	 * 获取：审稿意见链
+	 */
+
+    public void setGaojianYesnoText(String gaojianYesnoText) {
+        this.gaojianYesnoText = gaojianYesnoText;
+    }
+    /**
+	 * 设置：稿件历史版本
+	 */
+    public String getGaojianFileHistory() {
+        return gaojianFileHistory;
+    }
+
+
+    /**
+	 * 获取：稿件历史版本
+	 */
+
+    public void setGaojianFileHistory(String gaojianFileHistory) {
+        this.gaojianFileHistory = gaojianFileHistory;
+    }
+    /**
 	 * 设置：创建时间
 	 */
     public Date getCreateTime() {
@@ -317,6 +363,8 @@ public class GaojianEntity<T> implements Serializable {
             ", insertTime=" + insertTime +
             ", gaojianYesnoTypes=" + gaojianYesnoTypes +
             ", gaojianShenheContent=" + gaojianShenheContent +
+            ", gaojianYesnoText=" + gaojianYesnoText +
+            ", gaojianFileHistory=" + gaojianFileHistory +
             ", createTime=" + createTime +
         "}";
     }

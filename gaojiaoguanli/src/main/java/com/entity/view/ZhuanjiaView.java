@@ -23,6 +23,10 @@ public class ZhuanjiaView extends ZhuanjiaEntity implements Serializable {
 		* 性别的值
 		*/
 		private String sexValue;
+		/**
+		* 专家学科类型的值
+		*/
+		private String zhuanjiaValue;
 
 
 
@@ -52,6 +56,19 @@ public class ZhuanjiaView extends ZhuanjiaEntity implements Serializable {
 			*/
 			public void setSexValue(String sexValue) {
 				this.sexValue = sexValue;
+			}
+
+			/**
+			* 获取： 专家学科类型的值
+			*/
+			public String getZhuanjiaValue() {
+				return zhuanjiaValue;
+			}
+			/**
+			* 设置： 专家学科类型的值
+			*/
+			public void setZhuanjiaValue(String zhuanjiaValue) {
+				this.zhuanjiaValue = zhuanjiaValue;
 			}
 
 
