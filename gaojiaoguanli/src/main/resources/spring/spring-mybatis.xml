@@ -48,8 +48,20 @@
         <property name="filters" value="mergeStat"/>
     </bean>
 
+    <!-- Flyway 数据库迁移（在 MyBatis 初始化之前执行） -->
+    <bean id="flywayConfig" class="org.flywaydb.core.api.configuration.ClassicConfiguration">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="baselineOnMigrate" value="true"/>
+        <property name="baselineVersionAsString" value="1"/>
+        <property name="validateOnMigrate" value="true"/>
+        <property name="locationsAsStrings" value="classpath:db/migration"/>
+    </bean>
+    <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+        <constructor-arg ref="flywayConfig"/>
+    </bean>
+
     <!-- Spring整合Mybatis，更多查看文档：http://mp.baomidou.com -->
-    <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+    <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean" depends-on="flyway">
         <property name="dataSource" ref="dataSource"/>
         <!-- 自动扫描Mapping.xml文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>

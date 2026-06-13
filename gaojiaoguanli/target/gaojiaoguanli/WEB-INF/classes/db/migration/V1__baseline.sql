@@ -1,0 +1,3 @@
+-- Flyway baseline: empty marker for existing databases.
+-- Existing schema is treated as the V1 baseline.
+-- Run `flyway baseline` on production before first migration.

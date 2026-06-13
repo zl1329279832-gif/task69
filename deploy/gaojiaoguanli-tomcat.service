@@ -1,0 +1,51 @@
+# ==============================================================
+# 学报管理系统 Tomcat - systemd 服务配置
+# 安装: cp gaojiaoguanli-tomcat.service /etc/systemd/system/
+#        systemctl daemon-reload && systemctl enable gaojiaoguanli-tomcat
+# ==============================================================
+
+[Unit]
+Description=Gaojiaoguanli Tomcat Application Server
+Documentation=file:///opt/gaojiaoguanli/DEPLOY.md
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=forking
+
+# --- 运行用户 ---
+User=tomcat
+Group=tomcat
+
+# --- 环境变量 ---
+Environment="JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
+Environment="CATALINA_HOME=/opt/tomcat"
+Environment="CATALINA_BASE=/opt/tomcat"
+Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
+
+# JVM 参数（根据服务器内存调整）
+Environment="CATALINA_OPTS=-Xms512m -Xmx1024m -XX:+UseG1GC -Dfile.encoding=UTF-8"
+
+# --- 启停命令 ---
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh 30
+
+# --- 进程管理 ---
+PIDFile=/opt/tomcat/temp/tomcat.pid
+Restart=on-failure
+RestartSec=10
+TimeoutStartSec=60
+TimeoutStopSec=45
+
+# --- 安全加固 ---
+# 禁止写入 /usr /boot /etc（Tomcat 只需写 logs/ temp/ work/ 和外部 upload 目录）
+ProtectSystem=full
+# 允许写入上传目录
+ReadWritePaths=/data/gaojiaoguanli/upload
+ReadWritePaths=/opt/tomcat/logs
+ReadWritePaths=/opt/tomcat/temp
+ReadWritePaths=/opt/tomcat/work
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

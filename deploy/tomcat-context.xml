@@ -1,0 +1,39 @@
+<!--
+    Tomcat Context 配置片段
+    用途：如需让 Tomcat 直接伺服外部 upload 目录的静态文件（可选）。
+    当前方案中文件下载走 FileController /file/download 接口，此配置非必需。
+    如果需要通过 URL 直接访问上传文件（如图片预览），可将此配置加入
+    ${CATALINA_BASE}/conf/Catalina/localhost/gaojiaoguanli.xml
+
+    注意：启用此配置后，/upload/* 路径的文件可被直接访问，需评估安全影响。
+-->
+
+<Context docBase="/opt/tomcat/webapps/gaojiaoguanli" path="/gaojiaoguanli" reloadable="false">
+
+    <!--
+        将外部 upload 目录映射为 /upload 虚拟路径
+        访问方式: http://host:8080/gaojiaoguanli/upload/filename.pdf
+    -->
+    <Resources>
+        <PreResources className="org.apache.catalina.webresources.DirResourceSet"
+                      base="/data/gaojiaoguanli/upload"
+                      webAppMount="/upload"
+                      internalPath="/" />
+    </Resources>
+
+    <!-- 数据源配置（可选，如果不使用外部 properties 文件方式） -->
+    <!--
+    <Resource name="jdbc/gaojiaoguanli"
+              auth="Container"
+              type="javax.sql.DataSource"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://db-prod:3306/gaojiaoguanli?useUnicode=true&amp;characterEncoding=UTF-8"
+              username="gaojiaoguanli_app"
+              password="CHANGE_ME"
+              maxTotal="20"
+              maxIdle="10"
+              maxWaitMillis="60000"
+              validationQuery="SELECT 1" />
+    -->
+
+</Context>

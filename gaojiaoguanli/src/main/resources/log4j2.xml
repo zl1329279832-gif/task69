@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Log4j2 配置（替换 EOL 的 Log4j 1.2.17）
+    迁移说明：
+    - 原 log4j.properties 中 ConsoleAppender + DailyRollingFileAppender 已等价迁移
+    - 生产环境 Root level 从 DEBUG 调整为 INFO（减少日志量）
+    - SQL 调试日志默认 INFO，需要时改为 DEBUG
+    - 日志路径通过 sys:catalina.base 系统属性解析
+-->
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_DIR">${sys:catalina.base}/logs/gaojiaoguanli</Property>
+        <Property name="LOG_PATTERN">[gaojiaoguanli] %d{yyyy-MM-dd HH:mm:ss} %5p %c{1}:%L : %m%n</Property>
+        <Property name="CONSOLE_PATTERN">%d{yyyy-MM-dd HH:mm:ss} -%4r [%t] %-5p  %x - %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- 控制台输出 -->
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="${CONSOLE_PATTERN}" charset="UTF-8"/>
+        </Console>
+
+        <!-- 按日滚动文件，等价原 DailyRollingFileAppender -->
+        <RollingFile name="DAILY_FILE"
+                     fileName="${LOG_DIR}/gaojiaoguanli.log"
+                     filePattern="${LOG_DIR}/gaojiaoguanli_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <!-- 保留最近 30 天日志 -->
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- SQL 调试日志（生产默认 INFO，排查时改为 DEBUG） -->
+        <Logger name="java.sql.Connection" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="DAILY_FILE"/>
+        </Logger>
+        <Logger name="java.sql.Statement" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="DAILY_FILE"/>
+        </Logger>
+        <Logger name="java.sql.PreparedStatement" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="DAILY_FILE"/>
+        </Logger>
+        <Logger name="java.sql.ResultSet" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="DAILY_FILE"/>
+        </Logger>
+
+        <!-- Flyway 迁移日志 -->
+        <Logger name="org.flywaydb" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="DAILY_FILE"/>
+        </Logger>
+
+        <Root level="INFO">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="DAILY_FILE"/>
+        </Root>
+    </Loggers>
+</Configuration>
