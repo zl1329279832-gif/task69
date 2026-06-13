@@ -4,8 +4,12 @@
        xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!-- 引入属性文件 -->
-    <context:property-placeholder location="classpath:config.properties"/>
+    <!-- 引入属性文件：支持外置覆盖（-Dconfig.dir=/opt/config/prod） -->
+    <!-- 加载顺序：classpath 默认 → 外置文件覆盖 → JVM -D 参数覆盖 -->
+    <context:property-placeholder
+        location="classpath:config.properties,file:${config.dir:}/config.properties"
+        ignore-resource-not-found="true"
+        system-properties-mode="OVERRIDE"/>
 
     <!-- Service包(自动注入) -->
     <context:component-scan base-package="com.service"/>

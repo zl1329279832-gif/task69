@@ -1,0 +1,45 @@
+[Unit]
+Description=Apache Tomcat 9 - 稿件管理系统
+Documentation=https://tomcat.apache.org/tomcat-9.0-doc/
+After=network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+# --- 环境变量 ---
+Environment="JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
+Environment="CATALINA_HOME=/opt/tomcat"
+Environment="CATALINA_BASE=/opt/tomcat"
+Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
+
+# JVM 参数
+Environment="JAVA_OPTS=-Xms512m -Xmx1024m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8"
+
+# 应用配置：外置 config.properties 目录（多环境切换）
+# 预发布：改为 /opt/config/staging
+# 生产：改为 /opt/config/prod
+Environment="CATALINA_OPTS=-Dconfig.dir=/opt/config/prod"
+
+# --- 启停命令 ---
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+# --- 进程管理 ---
+PIDFile=/opt/tomcat/temp/tomcat.pid
+Restart=on-failure
+RestartSec=10
+
+# --- 安全加固 ---
+NoNewPrivileges=true
+PrivateTmp=true
+ReadWritePaths=/opt/tomcat/webapps /opt/tomcat/logs /opt/tomcat/temp /opt/tomcat/work /data/uploads/gaojiaoguanli
+
+# --- 资源限制 ---
+LimitNOFILE=65536
+TimeoutStartSec=120
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

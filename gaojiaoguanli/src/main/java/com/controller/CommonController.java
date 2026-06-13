@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,10 +47,29 @@ public class CommonController{
 	private static final Logger logger = LoggerFactory.getLogger(CommonController.class);
 	@Autowired
 	private CommonService commonService;
-	
+
 	@Autowired
 	private ConfigService configService;
-	
+
+	/**
+	 * 文件上传外置目录（从 config.properties 或外置配置读取）
+	 */
+	@Value("${upload.base.path:}")
+	private String uploadBasePath;
+
+	/**
+	 * 获取上传目录，优先使用外置路径，回退到 WAR 内目录
+	 */
+	private File getUploadDir(HttpServletRequest request) {
+		if (StringUtils.isNotBlank(uploadBasePath)) {
+			File dir = new File(uploadBasePath);
+			if (dir.exists() || dir.mkdirs()) {
+				return dir;
+			}
+		}
+		return new File(request.getSession().getServletContext().getRealPath("/upload"));
+	}
+
 	private static AipFace client = null;
 	
 	private static String BAIDU_DITU_AK = null;
@@ -89,8 +109,8 @@ public class CommonController{
 		}
 		JSONObject res = null;
 		try {
-			File file1 = new File(request.getSession().getServletContext().getRealPath("/upload")+"/"+face1);
-			File file2 = new File(request.getSession().getServletContext().getRealPath("/upload")+"/"+face2);
+			File file1 = new File(getUploadDir(request), face1);
+			File file2 = new File(getUploadDir(request), face2);
 			String img1 = Base64Util.encode(FileUtil.FileToByte(file1));
 			String img2 = Base64Util.encode(FileUtil.FileToByte(file2));
 			MatchRequest req1 = new MatchRequest(img1, "BASE64");

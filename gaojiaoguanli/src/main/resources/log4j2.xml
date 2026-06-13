@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Log4j 2.x 配置文件 — 从 log4j.properties 迁移而来
+  迁移说明：
+  - 原 DailyRollingFileAppender → RollingFile + TimeBasedTriggeringPolicy
+  - 原 rootLogger=DEBUG → 生产建议 INFO（减少日志量）
+  - 新增 90 天自动清理策略
+  - SQL 日志保持 DEBUG 级别（开发/排查用）
+-->
+<Configuration status="WARN" monitorInterval="30">
+
+    <Properties>
+        <!-- 日志目录：优先使用 catalina.home（Tomcat），回退到 ./logs -->
+        <Property name="LOG_DIR">${sys:catalina.home:-.}/logs/yo_log</Property>
+        <Property name="LOG_PATTERN_FILE">[FH_sys] %d{yyyy-MM-dd HH:mm:ss} %5p %c{1}:%L : %m%n</Property>
+        <Property name="LOG_PATTERN_CONSOLE">%d{yyyy-MM-dd HH:mm:ss} -%-4r [%t] %-5p %x - %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- 控制台输出 -->
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN_CONSOLE}" charset="UTF-8"/>
+        </Console>
+
+        <!-- 按天滚动文件日志，保留 90 天 -->
+        <RollingFile name="FILE"
+                     fileName="${LOG_DIR}/PurePro_current.log"
+                     filePattern="${LOG_DIR}/PurePro_%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${LOG_PATTERN_FILE}" charset="UTF-8"/>
+            <Policies>
+                <!-- 按日期触发滚动 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <!-- 自动删除 90 天前的日志文件 -->
+                <Delete basePath="${LOG_DIR}" maxDepth="1">
+                    <IfFileName glob="PurePro_*.log"/>
+                    <IfLastModified age="90d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- SQL 日志（开发调试用，生产可提升到 INFO） -->
+        <Logger name="java.sql.ResultSet" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Logger>
+        <Logger name="java.sql.Connection" level="DEBUG" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Logger>
+        <Logger name="java.sql.Statement" level="DEBUG" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Logger>
+        <Logger name="java.sql.PreparedStatement" level="DEBUG" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Logger>
+
+        <!-- Apache 框架日志 -->
+        <Logger name="org.apache" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Logger>
+
+        <!-- Spring 框架日志 -->
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Logger>
+
+        <!-- 应用根日志：INFO 级别（原 DEBUG 过于冗余） -->
+        <Root level="INFO">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
