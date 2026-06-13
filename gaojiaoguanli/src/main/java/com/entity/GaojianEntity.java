@@ -129,6 +129,30 @@ public class GaojianEntity<T> implements Serializable {
 
 
     /**
+     * 稿件状态：1待审 2审稿中 3修回 4录用 5退稿
+     */
+    @TableField(value = "gaojian_status_types")
+
+    private Integer gaojianStatusTypes;
+
+
+    /**
+     * 历史文件版本JSON
+     */
+    @TableField(value = "gaojian_file_history")
+
+    private String gaojianFileHistory;
+
+
+    /**
+     * 审稿意见链JSON
+     */
+    @TableField(value = "gaojian_yesno_text")
+
+    private String gaojianYesnoText;
+
+
+    /**
      * 创建时间
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
@@ -304,6 +328,48 @@ public class GaojianEntity<T> implements Serializable {
         this.createTime = createTime;
     }
 
+    /**
+     * 获取：稿件状态
+     */
+    public Integer getGaojianStatusTypes() {
+        return gaojianStatusTypes;
+    }
+
+    /**
+     * 设置：稿件状态
+     */
+    public void setGaojianStatusTypes(Integer gaojianStatusTypes) {
+        this.gaojianStatusTypes = gaojianStatusTypes;
+    }
+
+    /**
+     * 获取：历史文件版本JSON
+     */
+    public String getGaojianFileHistory() {
+        return gaojianFileHistory;
+    }
+
+    /**
+     * 设置：历史文件版本JSON
+     */
+    public void setGaojianFileHistory(String gaojianFileHistory) {
+        this.gaojianFileHistory = gaojianFileHistory;
+    }
+
+    /**
+     * 获取：审稿意见链JSON
+     */
+    public String getGaojianYesnoText() {
+        return gaojianYesnoText;
+    }
+
+    /**
+     * 设置：审稿意见链JSON
+     */
+    public void setGaojianYesnoText(String gaojianYesnoText) {
+        this.gaojianYesnoText = gaojianYesnoText;
+    }
+
     @Override
     public String toString() {
         return "Gaojian{" +
@@ -317,6 +383,9 @@ public class GaojianEntity<T> implements Serializable {
             ", insertTime=" + insertTime +
             ", gaojianYesnoTypes=" + gaojianYesnoTypes +
             ", gaojianShenheContent=" + gaojianShenheContent +
+            ", gaojianStatusTypes=" + gaojianStatusTypes +
+            ", gaojianFileHistory=" + gaojianFileHistory +
+            ", gaojianYesnoText=" + gaojianYesnoText +
             ", createTime=" + createTime +
         "}";
     }

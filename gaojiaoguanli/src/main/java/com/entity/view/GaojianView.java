@@ -28,6 +28,11 @@ public class GaojianView extends GaojianEntity implements Serializable {
 		*/
 		private String gaojianYesnoValue;
 
+		/**
+		* 稿件状态的值
+		*/
+		private String gaojianStatusValue;
+
 
 
 		//级联表 zhuanjia
@@ -106,6 +111,20 @@ public class GaojianView extends GaojianEntity implements Serializable {
 			*/
 			public void setGaojianYesnoValue(String gaojianYesnoValue) {
 				this.gaojianYesnoValue = gaojianYesnoValue;
+			}
+
+			/**
+			* 获取： 稿件状态的值
+			*/
+			public String getGaojianStatusValue() {
+				return gaojianStatusValue;
+			}
+
+			/**
+			* 设置： 稿件状态的值
+			*/
+			public void setGaojianStatusValue(String gaojianStatusValue) {
+				this.gaojianStatusValue = gaojianStatusValue;
 			}
 
 

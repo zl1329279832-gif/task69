@@ -111,6 +111,14 @@ public class ZhuanjiaEntity<T> implements Serializable {
 
 
     /**
+     * 专家擅长学科类型（逗号分隔的gaojian_types值）
+     */
+    @TableField(value = "zhuanjia_gaojian_types")
+
+    private String zhuanjiaGaojianTypes;
+
+
+    /**
      * 创建时间
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
@@ -240,6 +248,21 @@ public class ZhuanjiaEntity<T> implements Serializable {
     public void setSexTypes(Integer sexTypes) {
         this.sexTypes = sexTypes;
     }
+
+    /**
+     * 获取：专家擅长学科类型
+     */
+    public String getZhuanjiaGaojianTypes() {
+        return zhuanjiaGaojianTypes;
+    }
+
+    /**
+     * 设置：专家擅长学科类型
+     */
+    public void setZhuanjiaGaojianTypes(String zhuanjiaGaojianTypes) {
+        this.zhuanjiaGaojianTypes = zhuanjiaGaojianTypes;
+    }
+
     /**
 	 * 设置：创建时间
 	 */
@@ -267,6 +290,7 @@ public class ZhuanjiaEntity<T> implements Serializable {
             ", zhuanjiaIdNumber=" + zhuanjiaIdNumber +
             ", zhuanjiaPhoto=" + zhuanjiaPhoto +
             ", sexTypes=" + sexTypes +
+            ", zhuanjiaGaojianTypes=" + zhuanjiaGaojianTypes +
             ", createTime=" + createTime +
         "}";
     }

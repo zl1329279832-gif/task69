@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.LiyiChongtuDao">
+
+    <sql id="Base_Column_List">
+        a.id as id,
+        a.zuozhe_id as zuozheId,
+        a.zhuanjia_id as zhuanjiaId,
+        a.create_time as createTime
+    </sql>
+
+</mapper>
